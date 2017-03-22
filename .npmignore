@@ -1,0 +1,7 @@
+.git
+.vscode
+.codeclimate.yml
+sample
+test
+coverage
+runtest.bat
