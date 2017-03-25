@@ -19,9 +19,9 @@ Wiki page for AHP: [https://en.wikipedia.org/wiki/Analytic_hierarchy_process](ht
 
 ## Project page
 
-- [Project Home](http://blog.airic-yu.com/1880/file-query-js-nodejs-module-using-jquery-manipulate-foldersfiles)
-- [Github](https://github.com/airicyu/file-query)
-- [NPM](https://www.npmjs.com/package/file-query)
+- [Project Home](http://blog.airic-yu.com/1948/ahp-js-nodejs-module-analytic-hierarchy-process-ahp)
+- [Github](https://github.com/airicyu/ahp)
+- [NPM](https://www.npmjs.com/package/ahp)
 
 ------------------------
 
