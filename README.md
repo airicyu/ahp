@@ -17,6 +17,12 @@ This node.js module is a library for Analytic Hierarchy Process(AHP).
 Wiki page for AHP: [https://en.wikipedia.org/wiki/Analytic_hierarchy_process](https://en.wikipedia.org/wiki/Analytic_hierarchy_process)
 
 
+## Project page
+
+- [Project Home](http://blog.airic-yu.com/1880/file-query-js-nodejs-module-using-jquery-manipulate-foldersfiles)
+- [Github](https://github.com/airicyu/file-query)
+- [NPM](https://www.npmjs.com/package/file-query)
+
 ------------------------
 
 ## Glossary
