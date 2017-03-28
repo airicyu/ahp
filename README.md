@@ -1,4 +1,4 @@
-# ahp
+# ahp.js
 
 [![npm version](https://img.shields.io/npm/v/ahp.svg)](https://www.npmjs.com/package/ahp)
 [![node](https://img.shields.io/node/v/ahp.svg)](https://www.npmjs.com/package/ahp)
