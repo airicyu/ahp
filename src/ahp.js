@@ -113,7 +113,6 @@ class AHP {
             self.addCriteria(context.criteria);
         }
         if (context.criteriaItemRank) {
-            self.criteriaItemRank = self.criteriaItemRank || {};
             for (var criterion in context.criteriaItemRank) {
                 self.criteriaItemRank[criterion] = self.criteriaItemRank[criterion] || {};
                 for (var i = 0; i < context.criteriaItemRank[criterion].length; i++) {
@@ -127,7 +126,6 @@ class AHP {
             }
         }
         if (context.criteriaRank) {
-            self.criteriaRank = self.criteriaRank || [];
             for (var i = 0; i < context.criteriaRank.length; i++) {
                 self.criteriaRank[i] = self.criteriaRank[i] || []
                 for (var j = 0; j < context.criteriaRank[i].length; j++) {
@@ -179,18 +177,14 @@ class AHP {
         self.items.push.apply(self.items, items);
 
         for (let criterion of self.criteria) {
-            if (!self.criteriaItemRank[criterion]) {
-                self.criteriaItemRank[criterion] = numeric.identity(self.items.length);
-            } else {
-                for (let row of self.criteriaItemRank[criterion]) {
-                    row.push.apply(row, Array(items.length).fill(0));
-                }
-                items.forEach((item, i) => {
-                    let newRow = Array(self.items.length).fill(0);
-                    newRow[originalLength + i] = 1;
-                    self.criteriaItemRank[criterion].push(newRow);
-                })
+            for (let row of self.criteriaItemRank[criterion]) {
+                row.push.apply(row, Array(items.length).fill(0));
             }
+            items.forEach((item, i) => {
+                let newRow = Array(self.items.length).fill(0);
+                newRow[originalLength + i] = 1;
+                self.criteriaItemRank[criterion].push(newRow);
+            })
         }
 
         return self;
@@ -226,11 +220,9 @@ class AHP {
             self.items.splice(index, 1);
 
             for (let criterion of self.criteria) {
-                if (self.criteriaItemRank[criterion]) {
-                    self.criteriaItemRank[criterion].splice(index, 1);
-                    for (let row of self.criteriaItemRank[criterion]) {
-                        row.splice(index, 1);
-                    }
+                self.criteriaItemRank[criterion].splice(index, 1);
+                for (let row of self.criteriaItemRank[criterion]) {
+                    row.splice(index, 1);
                 }
             }
         }
@@ -273,18 +265,14 @@ class AHP {
             }
         }
 
-        if (!this.criteriaRank) {
-            this.criteriaRank = numeric.identity(this.criteria.length);
-        } else {
-            for (let row of self.criteriaRank) {
-                row.push.apply(row, Array(criteria.length).fill(0));
-            }
-            criteria.forEach((criterion, i) => {
-                let newRow = Array(self.criteria.length).fill(0);
-                newRow[originalLength + i] = 1;
-                self.criteriaRank.push(newRow);
-            })
+        for (let row of self.criteriaRank) {
+            row.push.apply(row, Array(criteria.length).fill(0));
         }
+        criteria.forEach((criterion, i) => {
+            let newRow = Array(self.criteria.length).fill(0);
+            newRow[originalLength + i] = 1;
+            self.criteriaRank.push(newRow);
+        })
 
         return self;
     }
@@ -317,9 +305,7 @@ class AHP {
         if (index >= 0) {
             self.criteria.splice(index, 1);
 
-            if (self.criteriaItemRank[criterion]) {
-                delete self.criteriaItemRank[criterion]
-            }
+            delete self.criteriaItemRank[criterion]
 
             self.criteriaRank.splice(index, 1);
             for (let row of self.criteriaRank) {
@@ -406,14 +392,18 @@ class AHP {
      */
     rankCriteriaItem(criterion, preferences) {
         let self = this;
+        if (self.criteria.indexOf(criterion) === -1){
+            return self;
+        }
+
         for (let prefer of preferences) {
-            let {
-                preferredItem,
-                comparingItem,
-                scale
-            } = prefer
+            let preferredItem, comparingItem, scale;
             if (Array.isArray(prefer)) {
                 [preferredItem, comparingItem, scale] = prefer;
+            } else {
+                preferredItem = prefer.preferredItem;
+                comparingItem = prefer.comparingItem;
+                scale = prefer.scale;
             }
             let itemAIndex = self.items.indexOf(preferredItem);
             let itemBIndex = self.items.indexOf(comparingItem);
@@ -455,14 +445,15 @@ class AHP {
      */
     rankCriteria(preferences) {
         let self = this;
+        
         for (let prefer of preferences) {
-            let {
-                preferredCriterion,
-                comparingCriterion,
-                scale
-            } = prefer;
+            let preferredCriterion, comparingCriterion, scale;
             if (Array.isArray(prefer)) {
                 [preferredCriterion, comparingCriterion, scale] = prefer;
+            } else {
+                preferredCriterion = prefer.preferredCriterion;
+                comparingCriterion = prefer.comparingCriterion;
+                scale = prefer.scale;
             }
             let criterionAIndex = self.criteria.indexOf(preferredCriterion);
             let criterionBIndex = self.criteria.indexOf(comparingCriterion);
@@ -575,8 +566,8 @@ class AHP {
             debugLog(problem);
         }
 
-        if (problem && (problem.type === AHP.contextErrorType.NoItem || problem.type === AHP.contextErrorType.NoCriteria ||
-                problem.type === AHP.contextErrorType.MissingCriteriaItemRank || problem.type === AHP.contextErrorType.MissingCriteriaRank)) {
+        if (problem && (problem.type === AHP.contextErrorType.NoItem || problem.type === AHP.contextErrorType.NoCriteria/* ||
+                problem.type === AHP.contextErrorType.MissingCriteriaItemRank || problem.type === AHP.contextErrorType.MissingCriteriaRank*/)) {
             return {
                 error: problem,
                 rankingMatrix: null,
@@ -607,7 +598,7 @@ class AHP {
                 debugLog(`Consistentcy ratio: ${cr}`);
                 if (cr <= 0.1) {
                     debugLog(`CR<=0.1 => sufficient consistency`);
-                    rankCompleteCounter += completed ? 1 : 0;
+                    rankCompleteCounter ++;
                 } else {
                     debugLog(`CR>0.1 => insufficient consistency`);
                 }
@@ -889,11 +880,11 @@ class ContextError {
     }
 
     /**
-     * To Question
-     * 
+     * get description
+     * @returns {string}
      * @memberOf ContextError
      */
-    toQuestion() {}
+    getDescription() {}
 }
 
 
@@ -916,13 +907,11 @@ class NoItem extends ContextError {
     }
 
     /**
-     * To Question
-     * 
-     * @returns 
-     * 
+     * get description
+     * @returns {string}
      * @memberOf NoItem
      */
-    toQuestion() {
+    getDescription() {
         return 'Missing comparison options information.';
     }
 }
@@ -947,13 +936,11 @@ class NoCriteria extends ContextError {
     }
 
     /**
-     * To Question
-     * 
-     * @returns 
-     * 
+     * get description
+     * @returns {string}
      * @memberOf NoCriteria
      */
-    toQuestion() {
+    getDescription() {
         return 'Missing comparison criteria information.';
     }
 }
@@ -991,13 +978,11 @@ class MissingCriteriaItemRank extends ContextError {
     }
 
     /**
-     * To Question
-     * 
-     * @returns 
-     * 
+     * get description
+     * @returns {string}
      * @memberOf MissingCriteriaItemRank
      */
-    toQuestion() {
+    getDescription() {
         return `In terms of criterion "${this.context.criterion}", which option do you prefer more and what is the scale level do you prefer?\n` +
             `Option (A): "${this.context.itemA}", Option (B): "${this.context.itemB}"\n\n` +
             `Scale(1-9):\n` +
@@ -1036,19 +1021,18 @@ class MissingCriteriaRank extends ContextError {
     }
 
     /**
-     * To Question
-     * 
-     * @returns 
-     * 
+     * get description
+     * @returns {string}
      * @memberOf MissingCriteriaRank
      */
-    toQuestion() {
+    getDescription() {
         return `Which critetion do you prefer more and what is the scale level do you prefer?\n` +
             `Option (A): "${this.context.criterionA}", Option (B): "${this.context.criterionB}"\n\n` +
             `Scale(1-9):\n` +
             AHP_RANK_SCALE_TABLE.map(scaleItem => `${scaleItem.scale}: ${scaleItem.definition}`).join('\n') + '\n' +
             '2,4,6,8: Intermediate values\n';
     }
+    
 }
 
 /**
@@ -1081,13 +1065,11 @@ class CriteriaItemRankInsufficientConsistencyRatio extends ContextError {
     }
 
     /**
-     * To Question
-     * 
-     * @returns 
-     * 
+     * get description
+     * @returns {string}
      * @memberOf CriteriaItemRankInsufficientConsistencyRatio
      */
-    toQuestion() {
+    getDescription() {
         return `In terms of criterion "${this.context.criterion}", criteria item rank matrix consistency ratio > 0.1`;
     }
 }
@@ -1120,13 +1102,11 @@ class CriteriaRankInsufficientConsistencyRatio extends ContextError {
     }
 
     /**
-     * To Question
-     * 
-     * @returns 
-     * 
+     * get description
+     * @returns {string}
      * @memberOf CriteriaRankInsufficientConsistencyRatio
      */
-    toQuestion() {
+    getDescription() {
         return `Criteria rank matrix consistency ratio > 0.1`;
     }
 }
