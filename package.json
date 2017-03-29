@@ -1,6 +1,6 @@
 {
   "name": "ahp",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Analytic Hierarchy Process(AHP) Library",
   "repository": {
     "type": "git",

@@ -1,6 +1,10 @@
 'use strict';
 const AHP = require('./../../ahp');
 
+/*
+ * Reference: https://en.wikipedia.org/wiki/Analytic_hierarchy_process_%E2%80%93_leader_example
+ */
+
 module.exports = AHP;
 
 var ahpContext = new AHP();

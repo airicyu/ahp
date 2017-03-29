@@ -595,6 +595,7 @@ class AHP {
                     cr
                 } = AHP.calculateMatrixConsistency(self.criteriaItemRank[crit]);
                 debugLog(`Consistentcy index: ${ci}`);
+                debugLog(`Random index: ${ri}`);
                 debugLog(`Consistentcy ratio: ${cr}`);
                 if (cr <= 0.1) {
                     debugLog(`CR<=0.1 => sufficient consistency`);
@@ -622,6 +623,7 @@ class AHP {
                 weightedVector
             } = AHP.calculateMatrixConsistency(self.criteriaRank);
             debugLog(`Consistentcy index: ${ci}`);
+            debugLog(`Random index: ${ri}`);
             debugLog(`Consistentcy ratio: ${cr}`);
             if (cr > 0.1) {
                 critRankCompleted = false;
