@@ -11,7 +11,7 @@
     "test": "gulp"
   },
   "engines": {
-    "node": "6 || 7"
+    "node": "6 || 7 || 8 || 9"
   },
   "keywords": [
     "AHP",
@@ -21,7 +21,7 @@
   "email": "airic.yu@gmail.com",
   "license": "Apache-2.0",
   "dependencies": {
-    "mathjs": "^3.10.1",
+    "mathjs": "^3.17.0",
     "numericjs": "^1.2.6"
   },
   "devDependencies": {
