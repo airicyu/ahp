@@ -57,21 +57,22 @@ ahpContext.addItems(['VendorA', 'VendorB', 'VendorC']);
 
 ahpContext.addCriteria(['price', 'functionality', 'UX']);
 
+//rank criteria with rank scale
 ahpContext.rankCriteriaItem('price', [
     ['VendorB', 'VendorC', 1 / 2],
     ['VendorA', 'VendorC', 1 / 2],
     ['VendorA', 'VendorB', 1]
 ]);
+
+//rank criteria with rank scale
 ahpContext.rankCriteriaItem('functionality', [
     ['VendorB', 'VendorC', 1],
     ['VendorA', 'VendorC', 5],
     ['VendorA', 'VendorB', 5]
 ]);
-ahpContext.rankCriteriaItem('UX', [
-    ['VendorB', 'VendorC', 10],
-    ['VendorA', 'VendorC', 10],
-    ['VendorA', 'VendorB', 1]
-]);
+
+//rank criteria with absolute rank scole
+ahpContext.setCriteriaItemRankByGivenScores('UX', [10, 10, 1]);
 
 ahpContext.rankCriteria(
     [
@@ -104,7 +105,8 @@ Console output
   rankedScoreMap:
    { VendorA: 0.3880952380952381,
      VendorB: 0.27380952380952384,
-     VendorC: 0.33809523809523817 } }
+     VendorC: 0.33809523809523817 },
+  rankedScores: [ 0.3880952380952381, 0.27380952380952384, 0.33809523809523817 ] }
 ```
 
 ### Import Data Context Sample
@@ -113,6 +115,10 @@ const AHP = require('ahp');
 
 var ahpContext = new AHP();
 
+/*
+notice that in this demo, we import price item ranking with matrix,
+and import UX item ranking with absolute scores. Both are supported.
+*/
 ahpContext.import({
     items: ['VendorA', 'VendorB', 'VendorC'],
     criteria: ['price', 'functionality', 'UX'],
@@ -127,11 +133,7 @@ ahpContext.import({
             [0.2, 1, 1],
             [0.2, 1, 1]
         ],
-        UX: [
-            [1, 1, 10],
-            [1, 1, 10],
-            [0.1, 0.1, 1]
-        ]
+        UX: [10, 10, 1]
     },
     criteriaRank: [
         [1, 3, 3],
@@ -163,7 +165,8 @@ Console output
   rankedScoreMap:
    { VendorA: 0.3880952380952381,
      VendorB: 0.27380952380952384,
-     VendorC: 0.33809523809523817 } }
+     VendorC: 0.33809523809523817 },
+  rankedScores: [ 0.3880952380952381, 0.27380952380952384, 0.33809523809523817 ] }
 ```
 
 ### Export Data Context Sample
@@ -202,32 +205,28 @@ for(let key in analyticContext){
 
 Console output
 ```
-error:
- null
+error:  null
 
-rankingMatrix:
- [ [ 0.25, 0.7142857142857141, 0.4761904761904761 ],
+rankingMatrix:  [ [ 0.25, 0.7142857142857141, 0.4761904761904761 ],
   [ 0.25, 0.14285714285714285, 0.4761904761904761 ],
   [ 0.5, 0.14285714285714285, 0.047619047619047616 ] ]
 
-itemRankMetaMap:
- { price: { ci: 0, ri: 0.58, cr: 0 },
+itemRankMetaMap:  { price: { ci: 0, ri: 0.58, cr: 0 },
   functionality: { ci: 0, ri: 0.58, cr: 0 },
   UX: { ci: 0, ri: 0.58, cr: 0 } }
 
-criteriaRankMetaMap:
- { ci: 0,
+criteriaRankMetaMap:  { ci: 0,
   ri: 0.58,
   cr: 0,
   weightedVector: [ 0.6000000000000001, 0.20000000000000004, 0.20000000000000004 ] }
 
-rankedScoreMap:
- { VendorA: 0.3880952380952381,
+rankedScoreMap:  { VendorA: 0.3880952380952381,
   VendorB: 0.27380952380952384,
   VendorC: 0.33809523809523817 }
 
-log:
- ==========================================
+rankedScores:  [ 0.3880952380952381, 0.27380952380952384, 0.33809523809523817 ]
+
+log:  ==========================================
 context:
 items:
 [ 'VendorA', 'VendorB', 'VendorC' ]
@@ -252,6 +251,7 @@ criteriaItemRank['price']
 ---------------------------------------------
 
 Consistentcy index: 0
+Random index: 0.58
 Consistentcy ratio: 0
 CR<=0.1 => sufficient consistency
 __________________________________
@@ -265,6 +265,7 @@ criteriaItemRank['functionality']
 ---------------------------------------------
 
 Consistentcy index: 0
+Random index: 0.58
 Consistentcy ratio: 0
 CR<=0.1 => sufficient consistency
 __________________________________
@@ -278,6 +279,7 @@ criteriaItemRank['UX']
 ---------------------------------------------
 
 Consistentcy index: 0
+Random index: 0.58
 Consistentcy ratio: 0
 CR<=0.1 => sufficient consistency
 __________________________________
@@ -291,6 +293,7 @@ criteriaRank:
 ---------------------------------------------------------
 
 Consistentcy index: 0
+Random index: 0.58
 Consistentcy ratio: 0
 CR<=0.1 => sufficient consistency
 Criteria Weight Vector: 0.6000000000000001,0.20000000000000004,0.20000000000000004
@@ -332,9 +335,9 @@ ranked item scores: (Higher score is better)
 - [removeCriterion(criterion)](#removeCriterion)
 - [removeCriteria(criteria)](#removeCriteria)
 - [rankCriteria(preferences)](#rankCriteria)
-- [setCriteriaRankByGivenScores(vector)](#setCriteriaRankByGivenScores)
+- [setCriteriaRankByGivenScores(scoreVector)](#setCriteriaRankByGivenScores)
 - [rankCriteriaItem(criterion, preferences)](#rankCriteriaItem)
-- [setCriteriaItemRankByGivenScores(criterion, vector)](#setCriteriaItemRankByGivenScores)
+- [setCriteriaItemRankByGivenScores(criterion, scoreVector)](#setCriteriaItemRankByGivenScores)
 - [resetCriteriaItemRank(criteria)](#resetCriteriaItemRank)
 - [resetCriteriaRank()](#resetCriteriaRank)
 - [findNextProblem()](#findNextProblem)

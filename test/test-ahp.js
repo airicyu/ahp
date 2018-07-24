@@ -87,11 +87,11 @@ describe('ahp-test', function () {
         ahpContext.removeItem('VendorE');
         ahpContext.addItem('VendorE');
         ahpContext.addItem('VendorF');
-        ahpContext.removeItems(['VendorE','VendorF']);
+        ahpContext.removeItems(['VendorE', 'VendorF']);
         ahpContext.addCriterion('dummy3');
         ahpContext.addCriterion('dummy3');
         ahpContext.removeCriterion('dummy');
-        ahpContext.removeCriteria(['dummy2','dummy3']);
+        ahpContext.removeCriteria(['dummy2', 'dummy3']);
 
         ahpContext.rankCriteriaItem('typo criteria', [{
                 preferredItem: 'VendorB',
@@ -166,8 +166,8 @@ describe('ahp-test', function () {
 
     it("Test base flow with blank constructor 2", function (done) {
         //test blank constructor, adding information with different sequences
-        var 
-        ahpContext = new AHP();
+        var
+            ahpContext = new AHP();
         ahpContext.addCriteria(['price', 'functionality', 'UX', 'support']);
         ahpContext.addItems(['VendorA', 'VendorB', 'VendorC']);
         ahpContext.addCriterion('dummy');
@@ -212,7 +212,7 @@ describe('ahp-test', function () {
             ['VendorA', 'VendorC', 5],
             ['VendorA', 'VendorB', 1]
         ]);
-        
+
         let {
             error,
             rankingMatrix,
@@ -314,7 +314,7 @@ describe('ahp-test', function () {
                 [0.5, 2, 2, 1]
             ]
         });
-        
+
         expect(ahpContext).to.eql({
             "items": ["VendorA", "VendorB", "VendorC"],
             "criteria": ["price", "functionality", "UX",
@@ -322,7 +322,7 @@ describe('ahp-test', function () {
             ],
             "criteriaItemRank": {
                 "price": [
-                    [1, 1, 0.5],
+                    [null, 1, 0.5],
                     [1, 1, 0.5],
                     [2, 2, 1]
                 ],
@@ -345,7 +345,7 @@ describe('ahp-test', function () {
                 ]
             },
             "criteriaRank": [
-                [1, 0, 3, 2],
+                [1, null, 3, 2],
                 [0.3333333333333333, 1, 1, 0.5],
                 [0.3333333333333333, 1, 1, 0.5],
                 [0.5, 2, 2, 1]
@@ -707,7 +707,7 @@ Scale(1-9):
         expect(problem).to.not.null;
         expect(problem.type).to.equal(AHP.contextErrorType.CriteriaItemRankInsufficientConsistencyRatio);
         expect(problem.getDescription()).to.equal('In terms of criterion "price", criteria item rank matrix consistency ratio > 0.1');
-        
+
         let {
             error,
             rankingMatrix,
@@ -1013,9 +1013,12 @@ Scale(1-9):
 
     it("Test printMatrixAsStr", function (done) {
         AHP.printMatrixAsStr()
-        let output = AHP.printMatrixAsStr([[0,1],[2,3]], ['a','b'],5);
-        let expectOutput = 
-`-------------------
+        let output = AHP.printMatrixAsStr([
+            [0, 1],
+            [2, 3]
+        ], ['a', 'b'], 5);
+        let expectOutput =
+            `-------------------
 |     |    a|    b|
 |-----|-----|-----|
 |    a|0.000|1.000|
@@ -1028,9 +1031,12 @@ Scale(1-9):
 
     it("Test print2DMatrixAsStr", function (done) {
         AHP.printMatrixAsStr()
-        let output = AHP.print2DMatrixAsStr([[0,1],[2,3]], ['a','b'], ['c','d'],5);
-        let expectOutput = 
-`-------------------
+        let output = AHP.print2DMatrixAsStr([
+            [0, 1],
+            [2, 3]
+        ], ['a', 'b'], ['c', 'd'], 5);
+        let expectOutput =
+            `-------------------
 |     |    a|    b|
 |-----|-----|-----|
 |    c|0.000|1.000|

@@ -3,6 +3,7 @@ const AHP = require('./../../ahp');
 
 module.exports = AHP;
 
+/*
 var ahpContext = new AHP();
 ahpContext.addItems(['tom', 'dick', 'harry']);
 ahpContext.addCriteria(['experience', 'education', 'charisma', 'age']);
@@ -104,5 +105,43 @@ ahpContext.rankCriteria(
         }
     ]
 );
+let output = ahpContext.debug();
+console.log(output.log);*/
+
+'use strict';
+//const AHP = require('ahp');
+var ahpContext = new AHP();
+ahpContext.import({
+    items: ['tom', 'dick', 'harry'],
+    criteria: ['experience', 'education', 'charisma', 'age'],
+    criteriaItemRank: {
+        experience: [
+            [1, 1/4, 4],
+            [4, 1, 9],
+            [1/4, 1/9, 1]
+        ],
+        education: [
+            [1, 3, 1/5],
+            [1/3, 1, 1/7],
+            [5, 7, 1]
+        ],
+        charisma: [
+            [1, 5, 9],
+            [1/5, 1, 4],
+            [1/9, 1/4, 1]
+        ],
+        age: [
+            [1, 1/3, 5],
+            [3, 1, 9],
+            [1/5, 1/9, 1]
+        ]
+    },
+    criteriaRank: [
+        [1, 4, 3, 7],
+        [1/4, 1, 1/3, 3],
+        [1/3, 3, 1, 5],
+        [1/7, 1/3, 1/5, 1]
+    ]
+});
 let output = ahpContext.debug();
 console.log(output.log);

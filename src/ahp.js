@@ -114,26 +114,62 @@ class AHP {
         }
         if (context.criteriaItemRank) {
             for (var criterion in context.criteriaItemRank) {
-                self.criteriaItemRank[criterion] = self.criteriaItemRank[criterion] || {};
-                for (var i = 0; i < context.criteriaItemRank[criterion].length; i++) {
-                    self.criteriaItemRank[criterion][i] = self.criteriaItemRank[criterion][i] || []
-                    for (var j = 0; j < context.criteriaItemRank[criterion][i].length; j++) {
-                        if (!isNaN(context.criteriaItemRank[criterion][i][j])) {
-                            self.criteriaItemRank[criterion][i][j] = context.criteriaItemRank[criterion][i][j];
+                self.criteriaItemRank[criterion] = self.criteriaItemRank[criterion] || [];
+
+                let criterionItemRankContext = context.criteriaItemRank[criterion];
+
+                //1D array => input with ranking score
+                if (Array.isArray(criterionItemRankContext) && criterionItemRankContext[0] && !Array.isArray(criterionItemRankContext[0])) {
+                    let scoreVector = criterionItemRankContext;
+                    for (let i = 0; i < scoreVector.length; i++) {
+                        for (let j = 0; j < scoreVector.length; j++) {
+                            self.criteriaItemRank[criterion][i][j] = scoreVector[i] / scoreVector[j];
+                            if (isNaN(self.criteriaItemRank[criterion][i][j])) {
+                                self.criteriaItemRank[criterion][i][j] = null
+                            }
+                        }
+                    }
+                } else if (Array.isArray(criterionItemRankContext) && criterionItemRankContext[0] && Array.isArray(criterionItemRankContext[0])) {
+                    for (var i = 0; i < criterionItemRankContext.length; i++) {
+                        self.criteriaItemRank[criterion][i] = criterionItemRankContext[i] || [];
+                        for (var j = 0; j < criterionItemRankContext[i].length; j++) {
+                            self.criteriaItemRank[criterion][i][j] = criterionItemRankContext[i][j];
+                            if (isNaN(self.criteriaItemRank[criterion][i][j])) {
+                                self.criteriaItemRank[criterion][i][j] = null
+                            }
+                        }
+                    }
+                }
+
+            }
+        }
+
+        if (context.criteriaRank) {
+
+            let criteriaRankContext = context.criteriaRank;
+            //1D array => input with ranking score
+            if (Array.isArray(criteriaRankContext) && criteriaRankContext[0] && !Array.isArray(criteriaRankContext[0])) {
+                let scoreVector = criteriaRankContext;
+                for (let i = 0; i < scoreVector.length; i++) {
+                    for (let j = 0; j < scoreVector.length; j++) {
+                        self.criteriaRank[i][j] = scoreVector[i] / scoreVector[j];
+                        if (isNaN(self.criteriaRank[i][j])) {
+                            self.criteriaRank[i][j] = null
+                        }
+                    }
+                }
+            } else if (Array.isArray(criteriaRankContext) && criteriaRankContext[0] && Array.isArray(criteriaRankContext[0])) {
+                for (var i = 0; i < criteriaRankContext.length; i++) {
+                    self.criteriaRank[i] = self.criteriaRank[i] || []
+                    for (var j = 0; j < criteriaRankContext[i].length; j++) {
+                        self.criteriaRank[i][j] = criteriaRankContext[i][j];
+                        if (isNaN(self.criteriaRank[i][j])) {
+                            self.criteriaRank[i][j] = null
                         }
                     }
                 }
             }
-        }
-        if (context.criteriaRank) {
-            for (var i = 0; i < context.criteriaRank.length; i++) {
-                self.criteriaRank[i] = self.criteriaRank[i] || []
-                for (var j = 0; j < context.criteriaRank[i].length; j++) {
-                    if (!isNaN(context.criteriaRank[i][j])) {
-                        self.criteriaRank[i][j] = context.criteriaRank[i][j]
-                    }
-                }
-            }
+
         }
         return self;
     }
@@ -365,16 +401,16 @@ class AHP {
      * Set Criteria perspective Item Rank By Given Scores
      * 
      * @param {string} criterion 
-     * @param {number[]} vector 
+     * @param {number[]} scoreVector 
      * @returns {AHP}
      * 
      * @memberOf AHP
      */
-    setCriteriaItemRankByGivenScores(criterion, vector) {
+    setCriteriaItemRankByGivenScores(criterion, scoreVector) {
         let self = this;
-        for (let i = 0; i < vector.length; i++) {
-            for (let j = 0; j < vector.length; j++) {
-                self.criteriaItemRank[criterion][i][j] = vector[i] / vector[j];
+        for (let i = 0; i < scoreVector.length; i++) {
+            for (let j = 0; j < scoreVector.length; j++) {
+                self.criteriaItemRank[criterion][i][j] = scoreVector[i] / scoreVector[j];
             }
         }
         return self;
@@ -392,7 +428,7 @@ class AHP {
      */
     rankCriteriaItem(criterion, preferences) {
         let self = this;
-        if (self.criteria.indexOf(criterion) === -1){
+        if (self.criteria.indexOf(criterion) === -1) {
             return self;
         }
 
@@ -419,16 +455,16 @@ class AHP {
      * Set Criteria Rank By Given Scores
      * 
      * @param {string} criterion
-     * @param {number[]} vector
+     * @param {number[]} scoreVector
      * @returns {AHP}
      * 
      * @memberOf AHP
      */
-    setCriteriaRankByGivenScores(vector) {
+    setCriteriaRankByGivenScores(scoreVector) {
         let self = this;
-        for (let i = 0; i < vector.length; i++) {
-            for (let j = 0; j < vector.length; j++) {
-                self.criteriaRank[i][j] = vector[i] / vector[j];
+        for (let i = 0; i < scoreVector.length; i++) {
+            for (let j = 0; j < scoreVector.length; j++) {
+                self.criteriaRank[i][j] = scoreVector[i] / scoreVector[j];
             }
         }
         return self;
@@ -445,7 +481,7 @@ class AHP {
      */
     rankCriteria(preferences) {
         let self = this;
-        
+
         for (let prefer of preferences) {
             let preferredCriterion, comparingCriterion, scale;
             if (Array.isArray(prefer)) {
@@ -535,7 +571,7 @@ class AHP {
 
     /**
      * Debug Analytic Process
-     * @returns {error: ContextError, rankingMatrix: number[][], criteriaRankMetaMap:{{ci:number,ri:number,cr:number}}, critWeightVector, rankedScoreMap:{item:number}, log:string }
+     * @returns {error: ContextError, rankingMatrix: number[][], criteriaRankMetaMap:{{ci:number,ri:number,cr:number}}, critWeightVector, rankedScoreMap:{item:number}, rankedScores: number[], log:string }
      * 
      * @memberOf AHP
      */
@@ -566,8 +602,10 @@ class AHP {
             debugLog(problem);
         }
 
-        if (problem && (problem.type === AHP.contextErrorType.NoItem || problem.type === AHP.contextErrorType.NoCriteria/* ||
-                problem.type === AHP.contextErrorType.MissingCriteriaItemRank || problem.type === AHP.contextErrorType.MissingCriteriaRank*/)) {
+        if (problem && (problem.type === AHP.contextErrorType.NoItem || problem.type === AHP.contextErrorType.NoCriteria
+                /* ||
+                                problem.type === AHP.contextErrorType.MissingCriteriaItemRank || problem.type === AHP.contextErrorType.MissingCriteriaRank*/
+            )) {
             return {
                 error: problem,
                 rankingMatrix: null,
@@ -599,7 +637,7 @@ class AHP {
                 debugLog(`Consistentcy ratio: ${cr}`);
                 if (cr <= 0.1) {
                     debugLog(`CR<=0.1 => sufficient consistency`);
-                    rankCompleteCounter ++;
+                    rankCompleteCounter++;
                 } else {
                     debugLog(`CR>0.1 => insufficient consistency`);
                 }
@@ -666,23 +704,25 @@ class AHP {
         let rankedScoreMap = {};
         self.items.forEach((item, i) => {
             rankedScoreMap[item] = rankedScores[i];
-        })
+        });
         debugLog('ranked item scores: (Higher score is better)');
         debugLog(AHP.print2DMatrixAsStr(numeric.transpose([rankedScores]), ['Score'], self.items, 5));
         debugLog('==========================================');
+
         return {
             error: problem,
             rankingMatrix,
             itemRankMetaMap,
             criteriaRankMetaMap,
             rankedScoreMap,
+            rankedScores,
             log
         };
     }
 
     /**
      * Debug Analytic Process
-     * @returns {error: ContextError, rankingMatrix: number[][], criteriaRankMetaMap:{{ci:number,ri:number,cr:number}}, critWeightVector, rankedScoreMap:{item:number} }
+     * @returns {error: ContextError, rankingMatrix: number[][], criteriaRankMetaMap:{{ci:number,ri:number,cr:number}}, critWeightVector, rankedScoreMap:{item:number}, rankedScores: number[] }
      * 
      * @memberOf AHP
      */
@@ -692,14 +732,16 @@ class AHP {
             rankingMatrix,
             itemRankMetaMap,
             criteriaRankMetaMap,
-            rankedScoreMap
+            rankedScoreMap,
+            rankedScores
         } = this.debug();
         return {
             error,
             rankingMatrix,
             itemRankMetaMap,
             criteriaRankMetaMap,
-            rankedScoreMap
+            rankedScoreMap,
+            rankedScores
         }
     }
 
@@ -759,7 +801,7 @@ class AHP {
         }
         let maxItemLength = matrixHeaders.map(a => a.length).reduce((a, b) => Math.max(a, b), minCellLength);
         let str = '';
-        str += '-'.repeat(maxItemLength + (matrixHeaders.length) * (maxItemLength+1) + 2) + '\n';
+        str += '-'.repeat(maxItemLength + (matrixHeaders.length) * (maxItemLength + 1) + 2) + '\n';
         str += '|' + ' '.repeat(maxItemLength) + '|' + matrixHeaders.map(item => (' '.repeat(maxItemLength - item.length) + item)).join('|') + '|\n';
         str += '|' + '-'.repeat(maxItemLength) + '|' + matrixHeaders.map(item => ('-'.repeat(maxItemLength))).join('|') + '|\n';
         for (let i = 0; i < matrix.length; i++) {
@@ -776,7 +818,7 @@ class AHP {
                 }).join('|') +
                 '|\n';
         };
-        str += '-'.repeat(maxItemLength + (matrixHeaders.length) * (maxItemLength+1) + 2) + '\n';
+        str += '-'.repeat(maxItemLength + (matrixHeaders.length) * (maxItemLength + 1) + 2) + '\n';
         return str;
     }
 
@@ -787,7 +829,7 @@ class AHP {
         let maxItemLength = matrixColHeaders.map(a => a.length).reduce((a, b) => Math.max(a, b), minCellLength);
         let maxRowItemLength = matrixRowItems.map(a => a.length).reduce((a, b) => Math.max(a, b), minCellLength);
         let str = '';
-        str += '-'.repeat(maxRowItemLength + (matrixColHeaders.length) * (maxItemLength+1) + 2) + '\n';
+        str += '-'.repeat(maxRowItemLength + (matrixColHeaders.length) * (maxItemLength + 1) + 2) + '\n';
         str += '|' + ' '.repeat(maxRowItemLength) + '|' + matrixColHeaders.map(item => (' '.repeat(maxItemLength - item.length) + item)).join('|') + '|\n';
         str += '|' + '-'.repeat(maxRowItemLength) + '|' + matrixColHeaders.map(item => ('-'.repeat(maxItemLength))).join('|') + '|\n';
         for (let i = 0; i < matrix.length; i++) {
@@ -804,7 +846,7 @@ class AHP {
                 }).join('|') +
                 '|\n';
         };
-        str += '-'.repeat(maxRowItemLength + (matrixColHeaders.length) * (maxItemLength+1) + 2) + '\n';
+        str += '-'.repeat(maxRowItemLength + (matrixColHeaders.length) * (maxItemLength + 1) + 2) + '\n';
         return str;
     }
 
@@ -1034,7 +1076,7 @@ class MissingCriteriaRank extends ContextError {
             AHP_RANK_SCALE_TABLE.map(scaleItem => `${scaleItem.scale}: ${scaleItem.definition}`).join('\n') + '\n' +
             '2,4,6,8: Intermediate values\n';
     }
-    
+
 }
 
 /**
