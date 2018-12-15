@@ -893,7 +893,7 @@ class AHP {
             consistentcyMeasures[i] = consistentcyVector[i] / weightedVector[i];
         }
         let avgConsistentcyMeasures = math.mean(consistentcyMeasures);
-        let ci = (avgConsistentcyMeasures - matrix.length) / 2;
+        let ci = (avgConsistentcyMeasures - matrix.length) / (matrix.length-1);
         let ri = RI_MAP[matrix.length];
         let cr = ri > 0 ? ci / ri : 0;
         return {
