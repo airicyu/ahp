@@ -1,6 +1,7 @@
 .git
 .vscode
 .codeclimate.yml
+.nyc_output
 sample
 test
 coverage
