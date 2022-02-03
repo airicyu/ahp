@@ -7,7 +7,7 @@
     "url": "https://github.com/airicyu/ahp"
   },
   "type": "module",
-  "main": "index.js",
+  "main": "./src/ahp.js",
   "scripts": {
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "coverage": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage"
@@ -21,9 +21,12 @@
   "license": "MIT",
   "dependencies": {
     "mathjs": "~10.1.1",
-    "numericjs": "~1.2.6"
+    "numericjs": "~1.2.6",
+    "util": "^0.12.4"
   },
   "devDependencies": {
-    "jest": "^27.4.7"
+    "jest": "^27.4.7",
+    "webpack": "^5.68.0",
+    "webpack-cli": "^4.9.2"
   }
 }
