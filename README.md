@@ -4,13 +4,6 @@
 [![Build](https://travis-ci.org/airicyu/ahp.svg?branch=master)](https://travis-ci.org/airicyu/ahp)
 [![Codecov branch](https://img.shields.io/codecov/c/github/airicyu/ahp/master.svg)](https://codecov.io/gh/airicyu/ahp)
 
-[![GitHub issues](https://img.shields.io/github/issues/airicyu/ahp.svg)](https://github.com/airicyu/ahp/issues)
-[![GitHub forks](https://img.shields.io/github/forks/airicyu/ahp.svg)](https://github.com/airicyu/ahp/network)
-[![GitHub stars](https://img.shields.io/github/stars/airicyu/ahp.svg)](https://github.com/airicyu/ahp/stargazers)
-[![GitHub License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://raw.githubusercontent.com/airicyu/ahp/master/LICENSE)
-[![dependencies Status](https://david-dm.org/airicyu/ahp/status.svg)](https://david-dm.org/airicyu/ahp)
-[![devDependencies Status](https://david-dm.org/airicyu/ahp/dev-status.svg)](https://david-dm.org/airicyu/ahp?type=dev)
-
 This node.js module is a library for Analytic Hierarchy Process(AHP).
 
 Wiki page for AHP: [https://en.wikipedia.org/wiki/Analytic_hierarchy_process](https://en.wikipedia.org/wiki/Analytic_hierarchy_process)
