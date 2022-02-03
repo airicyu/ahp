@@ -1,8 +1,8 @@
 .git
 .vscode
 .codeclimate.yml
-.nyc_output
-sample
+samples
 test
 coverage
 runtest.bat
+jest.config.js

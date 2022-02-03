@@ -41,4 +41,3 @@ jspm_packages
 
 node_modules
 coverage
-test/TESTS-xunit.xml

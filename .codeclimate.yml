@@ -5,6 +5,7 @@ ratings:
   paths:
   - src/**.js
 exclude_paths:
-- "test/"
-- "sample/"
+- "test"
+- "samples"
 - "lib"
+- "coverage"

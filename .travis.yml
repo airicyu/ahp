@@ -1,8 +1,7 @@
 language: node_js
 node_js:
-  - "6"
-before_script:
-  - npm install -g gulp
+  - "14"
+  - "16"
 install:
   - npm install
 script:

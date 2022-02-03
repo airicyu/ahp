@@ -1,4 +1,3 @@
-'use strict';
-var AHP = require('./src/ahp.js');
+import AHP from "./src/ahp.js";
 
-module.exports = AHP;
+export default AHP;

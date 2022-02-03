@@ -1,18 +1,16 @@
 {
   "name": "ahp",
-  "version": "2.2.2",
+  "version": "2.3.0",
   "description": "Analytic Hierarchy Process(AHP) Library",
   "repository": {
     "type": "git",
     "url": "https://github.com/airicyu/ahp"
   },
+  "type": "module",
   "main": "index.js",
   "scripts": {
-    "test": "nyc mocha",
-    "coverage": "nyc report --reporter=text-lcov > coverage/icov.info && codecov --file=./coverage/lcov.info"
-  },
-  "engines": {
-    "node": "6 || 7 || 8 || 9 || 10 || 11"
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "coverage": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage"
   },
   "keywords": [
     "AHP",
@@ -20,36 +18,12 @@
   ],
   "author": "Eric Yu",
   "email": "airic.yu@gmail.com",
-  "license": "Apache-2.0",
+  "license": "MIT",
   "dependencies": {
-    "mathjs": "~5.4.0",
+    "mathjs": "~10.1.1",
     "numericjs": "~1.2.6"
   },
   "devDependencies": {
-    "chai": "~4.2.0",
-    "mocha": "~5.2.0",
-    "nyc": "~13.1.0",
-    "supertest": "~3.3.0"
-  },
-  "nyc": {
-    "check-coverage": true,
-    "per-file": true,
-    "lines": 70,
-    "statements": 70,
-    "functions": 70,
-    "branches": 70,
-    "include": [
-      "src/**.js"
-    ],
-    "exclude": [],
-    "reporter": [
-      "lcov",
-      "text-summary"
-    ],
-    "require": [],
-    "extension": [],
-    "cache": true,
-    "all": true,
-    "report-dir": "./coverage"
+    "jest": "^27.4.7"
   }
 }
