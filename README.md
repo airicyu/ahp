@@ -1,7 +1,6 @@
 # ahp.js
 
 [![npm version](https://img.shields.io/npm/v/ahp.svg)](https://www.npmjs.com/package/ahp)
-[![node](https://img.shields.io/node/v/ahp.svg)](https://www.npmjs.com/package/ahp)
 [![Build](https://travis-ci.org/airicyu/ahp.svg?branch=master)](https://travis-ci.org/airicyu/ahp)
 [![Codecov branch](https://img.shields.io/codecov/c/github/airicyu/ahp/master.svg)](https://codecov.io/gh/airicyu/ahp)
 
@@ -19,7 +18,6 @@ Wiki page for AHP: [https://en.wikipedia.org/wiki/Analytic_hierarchy_process](ht
 
 ## Project page
 
-- [Project Home](http://blog.airic-yu.com/1948/ahp-js-nodejs-module-analytic-hierarchy-process-ahp)
 - [Github](https://github.com/airicyu/ahp)
 - [NPM](https://www.npmjs.com/package/ahp)
 
@@ -42,7 +40,7 @@ Wiki page for AHP: [https://en.wikipedia.org/wiki/Analytic_hierarchy_process](ht
 ## Install
 
 ```bash
-$ npm install --save ahp
+$ npm i ahp
 ```
 
 ------------------------
@@ -50,8 +48,8 @@ $ npm install --save ahp
 
 ### Hello World Sample
 ```javascript
-const AHP = require('ahp');
-var ahpContext = new AHP();
+import AHP from 'ahp';
+const ahpContext = new AHP();
 
 ahpContext.addItems(['VendorA', 'VendorB', 'VendorC']);
 
@@ -82,7 +80,7 @@ ahpContext.rankCriteria(
     ]
 );
 
-let output = ahpContext.run();
+const output = ahpContext.run();
 console.log(output);
 ```
 
@@ -111,9 +109,9 @@ Console output
 
 ### Import Data Context Sample
 ```javascript
-const AHP = require('ahp');
+import AHP from 'ahp';
 
-var ahpContext = new AHP();
+const ahpContext = new AHP();
 
 /*
 notice that in this demo, we import price item ranking with matrix,
@@ -142,7 +140,7 @@ ahpContext.import({
     ]
 });
 
-let output = ahpContext.run();
+const output = ahpContext.run();
 console.log(output);
 ```
 
@@ -171,8 +169,8 @@ Console output
 
 ### Export Data Context Sample
 ```javascript
-const AHP = require('ahp');
-var ahpContext = new AHP();
+import AHP from 'ahp';
+const ahpContext = new AHP();
 ......
 const util = require('util');
 console.log(util.inspect(ahpContext.export(), false, null));
@@ -194,11 +192,11 @@ Console output
 
 ### Output Analysis Process Information Sample
 ```javascript
-const AHP = require('ahp');
-var ahpContext = new AHP();
+import AHP from 'ahp';
+const ahpContext = new AHP();
 ......
-let analyticContext = ahpContext.debug();
-for(let key in analyticContext){
+const analyticContext = ahpContext.debug();
+for(const key in analyticContext){
     console.log(`${key}: `, analyticContext[key], '\n');
 }
 ```
@@ -324,25 +322,45 @@ ranked item scores: (Higher score is better)
 ------------------------
 
 ## API
-- [import(context)](#import)
-- [export()](#export)
-- [addItem(item)](#addItem)
-- [addItems(items)](#addItems)
-- [removeItem(item)](#removeItem)
-- [removeItems(items)](#removeItems)
-- [addCriterion(criterion)](#addCriterion)
-- [addCriteria(criteria)](#addCriteria)
-- [removeCriterion(criterion)](#removeCriterion)
-- [removeCriteria(criteria)](#removeCriteria)
-- [rankCriteria(preferences)](#rankCriteria)
-- [setCriteriaRankByGivenScores(scoreVector)](#setCriteriaRankByGivenScores)
-- [rankCriteriaItem(criterion, preferences)](#rankCriteriaItem)
-- [setCriteriaItemRankByGivenScores(criterion, scoreVector)](#setCriteriaItemRankByGivenScores)
-- [resetCriteriaItemRank(criteria)](#resetCriteriaItemRank)
-- [resetCriteriaRank()](#resetCriteriaRank)
-- [findNextProblem()](#findNextProblem)
-- [debug()](#debug)
-- [run()](#run)
+- [ahp.js](#ahpjs)
+  - [Project page](#project-page)
+  - [Glossary](#glossary)
+  - [Install](#install)
+  - [Quick Samples](#quick-samples)
+    - [Hello World Sample](#hello-world-sample)
+    - [Import Data Context Sample](#import-data-context-sample)
+    - [Export Data Context Sample](#export-data-context-sample)
+    - [Output Analysis Process Information Sample](#output-analysis-process-information-sample)
+  - [API](#api)
+    - [import(context)](#importcontext)
+    - [export()](#export)
+    - [addItem(item)](#additemitem)
+    - [addItems(items)](#additemsitems)
+    - [removeItem(item)](#removeitemitem)
+    - [removeItems(items)](#removeitemsitems)
+    - [addCriterion(criterion)](#addcriterioncriterion)
+    - [addCriteria(criteria)](#addcriteriacriteria)
+    - [removeCriterion(criterion)](#removecriterioncriterion)
+    - [removeCriteria(criteria)](#removecriteriacriteria)
+    - [rankCriteria(preferences)](#rankcriteriapreferences)
+    - [setCriteriaRankByGivenScores(vector)](#setcriteriarankbygivenscoresvector)
+    - [rankCriteriaItem(criterion, preferences)](#rankcriteriaitemcriterion-preferences)
+    - [setCriteriaItemRankByGivenScores(criterion, vector)](#setcriteriaitemrankbygivenscorescriterion-vector)
+    - [resetCriteriaItemRank(criteria)](#resetcriteriaitemrankcriteria)
+    - [resetCriteriaRank()](#resetcriteriarank)
+    - [findNextProblem()](#findnextproblem)
+    - [debug()](#debug)
+    - [run()](#run)
+  - [Classes](#classes)
+    - [AHP](#ahp)
+    - [ContextError](#contexterror)
+    - [NoItem](#noitem)
+    - [NoCriteria](#nocriteria)
+    - [MissingCriteriaItemRank](#missingcriteriaitemrank)
+    - [MissingCriteriaRank](#missingcriteriarank)
+    - [CriteriaItemRankInsufficientConsistencyRatio](#criteriaitemrankinsufficientconsistencyratio)
+    - [CriteriaRankInsufficientConsistencyRatio](#criteriarankinsufficientconsistencyratio)
+  - [Arthor contact](#arthor-contact)
 
 <a name="import"></a>
 ### import(context)
@@ -1119,7 +1137,6 @@ Preperties
 | context.cr | number | The consistency ratio. |
 
 ------------------------
-## Human contact
+## Arthor contact
 
 - Eric Yu: airic.yu@gmail.com
-
