@@ -1,5 +1,5 @@
-import AHP from "../src/ahp.js";
-import numeric from "numericjs";
+const AHP = require("../src/ahp.js");
+const numeric = require("numericjs");
 
 describe("ahp-test", function () {
   test("Test base flow", function (done) {

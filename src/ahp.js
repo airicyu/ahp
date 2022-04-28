@@ -1,8 +1,8 @@
 "use strict";
 
-import * as math from "mathjs";
-import numeric from "numericjs";
-import util from "util";
+const math = require("mathjs");
+const numeric = require("numericjs");
+const util = require("util");
 
 /* Random Consistency Index */
 const RI_MAP = {
@@ -1241,4 +1241,4 @@ AHP.contextErrorType = {
     "CRITERIA_RANK_INSUFFICIENT_CONSISTENCY_RATIO",
 };
 
-export default AHP;
+module.exports = AHP;

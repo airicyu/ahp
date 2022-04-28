@@ -6,7 +6,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const config = {
-  entry: ["./src/ahp.js"], // 在 index 檔案後的 .js 副檔名是可選的
+  entry: ["./src/ahp.js"],
   output: {
     path: path.join(__dirname, "dist"),
     filename: "ahp.bundle.js",

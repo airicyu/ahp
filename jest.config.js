@@ -3,4 +3,4 @@ const config = {
   roots: ["<rootDir>/test/"],
 };
 
-export default config;
+module.exports = config;

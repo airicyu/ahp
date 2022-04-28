@@ -1,12 +1,11 @@
 {
   "name": "ahp",
-  "version": "2.3.1",
+  "version": "2.4.1",
   "description": "Analytic Hierarchy Process(AHP) Library",
   "repository": {
     "type": "git",
     "url": "https://github.com/airicyu/ahp"
   },
-  "type": "module",
   "main": "./src/ahp.js",
   "scripts": {
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
@@ -20,7 +19,7 @@
   "email": "airic.yu@gmail.com",
   "license": "MIT",
   "dependencies": {
-    "mathjs": "~10.1.1",
+    "mathjs": "~10.5.0",
     "numericjs": "~1.2.6",
     "util": "^0.12.4"
   },
